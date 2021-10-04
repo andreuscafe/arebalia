@@ -3,15 +3,28 @@ Entities = require 'entities'
 -- Game logical shit
 function love.load()
   love.window.setTitle("Relatos de Arebalia")
+  WinW, WinH = love.graphics.getDimensions()
 
   CurrentCharacter = {
     character = 'Demon',
     action = 'moving',
-    direction = 'left',
+    direction = 'down',
     speed = 100,
-    x = 400,
-    y = 300
+    x = 0,
+    y = 0,
   }
+  
+  CCwidth, CCheight = Entities.Sprites.Characters[CurrentCharacter.character][CurrentCharacter.action][CurrentCharacter.direction]:getDimensions()
+
+  CurrentCharacter.dimensions = {
+    width = CCwidth,
+    height = CCheight
+  }
+  CurrentCharacter.x = (WinW / 2) - (CurrentCharacter.dimensions.width / 4)
+  CurrentCharacter.y = (WinH / 2) - (CurrentCharacter.dimensions.height / 4)
+
+  print(CurrentCharacter.dimensions.width)
+  print(CurrentCharacter.dimensions.height)
 
   function KeyPressed(key)
     return love.keyboard.isDown(key)
@@ -75,7 +88,7 @@ function love.load()
       CharacterData.x,
       CharacterData.y
 
-    print(character, action, direction)
+    -- print(character, action, direction)
 
     if (action == 'moving') then
       return Entities.Animations.Characters[character][action][direction]:draw(
@@ -94,4 +107,7 @@ end
 function love.draw()
   -- The only shit rendering now is this mf red demon knight king
   PaintCharacter(CurrentCharacter)
+
+  love.graphics.print(CurrentCharacter.x, 10, 10)
+  love.graphics.print(CurrentCharacter.y, 10, 30)
 end
